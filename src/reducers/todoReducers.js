@@ -1,45 +1,70 @@
-const initialData = {
-    list: []
+const storedList = localStorage.getItem("list");
+let initialData = {
+  list: [],
+};
+if (storedList) {
+  try {
+    initialData = {
+      list: JSON.parse(storedList),
+    };
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+  }
 }
 const todoReducers = (state = initialData, action) => {
-    switch (action.type) {
-        case 'ADD_TODO':
-            const { id, data } = action.payload;
-            return {
-                ...state,
-                list: [
-                    ...state.list,
-                    {
-                        id: id,
-                        data: data,
-                        isDone: false
-                    }
-                ]
-            }
-        case 'TOGGLE_IS_DONE':
-            return {
-                ...state,
-                list: state.list.map((item) =>
-                    item.id === action.payload.id ? { ...item, isDone: !item.isDone } : item
-                )
-            };
-        case 'DELETE_TODO':
-            const newList = state.list.filter((item) =>
-                item.id !== action.id
-            )
-            return {
-                ...state,
-                list: newList
-            }
-        case 'REMOVE_TODO':
-            const newlist = [];
-
-            return {
-                ...state,
-                list: newlist
-            }
-        default: return state;
-    }
-}
+  switch (action.type) {
+    case "ADD_TODO":
+      const { id, data } = action.payload;
+      let lList = JSON.parse(localStorage.getItem("list"));
+      const updatedList = [
+        ...lList,
+        {
+          id: id,
+          data: data,
+          isDone: false,
+        },
+      ];
+      localStorage.setItem("list", JSON.stringify(updatedList));
+      return {
+        ...state,
+        list: updatedList, // Update state with the updated list
+      };
+    case "TOGGLE_IS_DONE":
+      let anyList = JSON.parse(localStorage.getItem("list"));
+      localStorage.setItem(
+        "list",
+        JSON.stringify(
+          anyList.map((item) =>
+            item.id === action.payload.id
+              ? { ...item, isDone: !item.isDone }
+              : item
+          )
+        )
+      );
+      return {
+        ...state,
+        list: JSON.parse(localStorage.getItem("list")),
+      };
+    case "DELETE_TODO":
+      let anyList2 = JSON.parse(localStorage.getItem("list"));
+      localStorage.setItem(
+        "list",
+        JSON.stringify(anyList2.filter((item) => item.id !== action.id))
+      );
+      return {
+        ...state,
+        list: JSON.parse(localStorage.getItem("list")),
+      };
+    case "REMOVE_TODO":
+      const newlist = [];
+      localStorage.setItem("list", JSON.stringify(newlist));
+      return {
+        ...state,
+        list: JSON.parse(localStorage.getItem("list")),
+      };
+    default:
+      return state;
+  }
+};
 
 export default todoReducers;

@@ -9,12 +9,13 @@ import "./Main.css";
 function Main() {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.todoReducers.list);
-  const newList = [...list].reverse();
+  // const listJson = [JSON.parse(list)];
+  console.log("list", list);
+  // console.log("listJson", listJson);
+  const newList = [].concat(list).reverse();
   const [inputData, setInputData] = useState("");
   const handleEnter = (e) => {
-    console.log("entered handle function");
     if (e.key === "Enter") {
-      console.log("entered if of handle");
       e.preventDefault();
       dispatch(addToDo(inputData));
       setInputData("");
