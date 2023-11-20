@@ -15,7 +15,7 @@ function Main() {
   const newList = [].concat(list).reverse();
   const [inputData, setInputData] = useState("");
   const handleEnter = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && inputData !== "") {
       e.preventDefault();
       dispatch(addToDo(inputData));
       setInputData("");
