@@ -1,4 +1,7 @@
 const storedList = localStorage.getItem("list");
+if (!storedList) {
+  localStorage.setItem("list", JSON.stringify([]));
+}
 let initialData = {
   list: [],
 };
